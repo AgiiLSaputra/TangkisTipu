@@ -141,13 +141,6 @@ export default function Hero() {
                 </div>
                 {/*  Kolom Kanan: Foto Edukator di Atas Kurva Putih (5 Kolom)  */}
                 <div className="lg:col-span-5 relative flex flex-col items-center justify-end z-0">
-                    {/*  Floating Badge di Atas Foto  */}
-                    <div
-                        className="mb-3 px-5 py-2.5 rounded-full bg-white/95 backdrop-blur-md shadow-xl flex items-center gap-2.5 border border-white text-on-surface ring-1 ring-black/5 animate-bounce [animation-duration:3s] relative z-20">
-                        <span className="w-3 h-3 rounded-full bg-emerald-500 animate-pulse shrink-0"></span>
-                        <span className="font-label-sm text-label-sm font-bold text-primary tracking-tight">Materi
-                            Terverifikasi Satgas PASTI & OJK</span>
-                    </div>
                     {/*  Foto Edukator Wanita Berhijab  */}
                     <div className="relative w-[700px] -ml-16 max-w-none flex justify-center items-end">
                         <img alt="Edukator TangkisTipu"
