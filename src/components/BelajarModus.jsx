@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 const TRACKS = {
   pelajar: {
@@ -17,6 +17,15 @@ const TRACKS = {
     ],
     heading: '4 Jebakan Paling Sering Menimpa Remaja',
     summaryDesc: 'Fokus pada jebakan diamond game, like media sosial, pembajakan akun, dan pinjaman data siswa.',
+    stats: {
+      title: 'Statistik Kasus Remaja (Data OJK & Siber)',
+      items: [
+        { label: 'Modul Game & Akun Phishing', value: '48% Korban', width: 48, valueClass: 'text-danger-red', barClass: 'bg-danger-red' },
+        { label: 'Uang Jajan & Like Medsos', value: '31% Korban', width: 31, valueClass: 'text-secondary', barClass: 'bg-secondary-container' },
+        { label: 'Data & Pinjol Pelajar', value: '21% Korban', width: 21, valueClass: 'text-primary', barClass: 'bg-primary' },
+      ],
+      note: 'Edukasi sejak dini terbukti menurunkan risiko terkena manipulasi digital hingga 73%.',
+    },
     modules: [
       {
         id: 'pelajar-01',
@@ -31,6 +40,7 @@ const TRACKS = {
         solution: 'Verifikasi 2FA & Link Resmi',
       },
       {
+        id: 'pelajar-02',
         iconBoxClass: 'bg-safe-green-light text-tertiary',
         icon: 'thumb_up',
         tag: 'Uang Jajan Palsu',
@@ -42,6 +52,7 @@ const TRACKS = {
         solution: 'Rumus Tidak Ada Uang Mudah',
       },
       {
+        id: 'pelajar-03',
         iconBoxClass: 'bg-danger-red-light text-danger-red',
         icon: 'badge',
         tag: 'Identitas & NIK',
@@ -53,6 +64,7 @@ const TRACKS = {
         solution: 'Rahasia Data Pribadi Mutlak',
       },
       {
+        id: 'pelajar-04',
         iconBoxClass: 'bg-primary-fixed text-primary',
         icon: 'alternate_email',
         tag: 'Manipulasi Sosial IG/WA',
@@ -81,8 +93,19 @@ const TRACKS = {
     ],
     heading: '4 Jebakan yang Mengincar Profesional & Pekerja',
     summaryDesc: 'Kurikulum APK malware (.apk undangan/resi), modus investasi bodong robot trading, dan phising internet banking.',
+    stats: {
+      title: 'Statistik Kasus Dewasa (Data OJK & Siber)',
+      items: [
+        { label: 'File .apk Undangan/Resi', value: '3.684 Laporan', width: 6, valueClass: 'text-secondary', barClass: 'bg-secondary-container' },
+        { label: 'Investasi Bodong', value: '32.738 Laporan', width: 50, valueClass: 'text-tertiary', barClass: 'bg-tertiary' },
+        { label: 'Mengaku Petugas Bank', value: '65.914 Laporan', width: 100, valueClass: 'text-danger-red', barClass: 'bg-danger-red' },
+        { label: 'Tawaran Kerja Palsu', value: '29.373 Laporan', width: 45, valueClass: 'text-primary', barClass: 'bg-primary' },
+      ],
+      note: 'Urut sesuai modul 01–04. Data APK per 15 Okt 2025, lainnya s.d. 31 Agu 2026. Total laporan ke IASC 702.342 (Nov 2024–Sep 2026); korban terbanyak pekerja swasta usia 18–35 tahun.',
+    },
     modules: [
       {
+        id: 'dewasa-01',
         iconBoxClass: 'bg-warning-yellow-light text-secondary',
         icon: 'install_mobile',
         tag: 'APK Penyamar',
@@ -94,6 +117,7 @@ const TRACKS = {
         solution: 'Jangan Buka .apk dari Nomor Asing',
       },
       {
+        id: 'dewasa-02',
         iconBoxClass: 'bg-safe-green-light text-tertiary',
         icon: 'trending_up',
         tag: 'Investasi Bodong',
@@ -105,26 +129,28 @@ const TRACKS = {
         solution: 'Cek Legalitas Investasi di OJK',
       },
       {
+        id: 'dewasa-03',
         iconBoxClass: 'bg-danger-red-light text-danger-red',
         icon: 'account_balance',
-        tag: 'Phishing Perbankan',
+        tag: 'Mengaku Petugas',
         time: '3 Menit',
         level: 'Hukum & Data',
-        title: 'SMS & Link Login Internet Banking Palsu',
-        desc: 'SMS berlogo bank mengabarkan "rekening diblokir" disertai tautan login. Halaman tiruan menyerupai bank asli dan langsung mencuri user ID beserta PIN-mu.',
-        caseStudy: <>Hendra (41) login di <em>internetbanking-verify.web.id</em> sesuai instruksi SMS; Rp18.000.000 berpindah ke rekening lain malam itu juga.</>,
-        solution: 'Akses Rekening via Aplikasi Resmi',
+        title: 'Penipu Mengaku Petugas Bank & Aparat',
+        desc: 'Pelaku menyamar sebagai petugas bank, kurir, atau aparat lalu menakuti Anda: rekening diblokir atau terseret kasus. Setelah panik, Anda diminta menyebut OTP/PIN atau memindahkan dana ke "rekening aman".',
+        caseStudy: <>Hendra (41) ditelpon "petugas bank" karena rekeningnya dianggap mencurigakan; setelah menyebut kode OTP, Rp18.000.000 berpindah ke rekening lain malam itu juga.</>,
+        solution: 'Tutup & Hubungi Bank via Nomor Resmi',
       },
       {
+        id: 'dewasa-04',
         iconBoxClass: 'bg-primary-fixed text-primary',
-        icon: 'qr_code_2',
-        tag: 'Transfer & QRIS Palsu',
+        icon: 'badge',
+        tag: 'Tawaran Kerja Palsu',
         time: '3 Menit',
         level: 'Analisis Pesan',
-        title: 'Notifikasi Transfer Palsu & QRIS Tempelan',
-        desc: 'Pembeli mengirim tangkapan layar "transfer berhasil" atau menempel QRIS yang mengarah ke rekening penipu. Saldo belum pernah masuk, barang sudah terlanjur dikirim.',
-        caseStudy: <>Sari (26) percaya screenshot transfer Rp1.500.000 dari pembeli marketplace; paket laptop terkirim, uang tak pernah masuk.</>,
-        solution: 'Tunggu Notifikasi di Aplikasi Resmi',
+        title: 'Tawaran Kerja & Deposit Paruh Waktu Palsu',
+        desc: 'Direkrut lewat WhatsApp atau Telegram untuk tugas ringan berkomisi. Komisi kecil dibayar di awal sebagai umpan, lalu diminta deposit hingga dana tak bisa ditarik.',
+        caseStudy: <>Sinta (24) dibayar Rp30.000 untuk tugas pertama, lalu diminta deposit Rp500.000 yang terus berlanjut tanpa pernah bisa ditarik.</>,
+        solution: 'Kerja Asli Tak Pernah Minta Setor',
       },
     ],
   },
@@ -143,9 +169,20 @@ const TRACKS = {
       { icon: 'bolt', iconClass: 'text-secondary-fixed', text: 'Huruf Besar & Bahasa Santai' },
     ],
     heading: '4 Jebakan yang Sering Menimpa Lansia',
-    summaryDesc: 'Desain kontras tinggi dengan huruf ekstra besar. Menghadapi telepon panik anak kecelakaan atau klaim hadiah undian pensiun.',
+    summaryDesc: 'Desain kontras tinggi dengan huruf ekstra besar. Menghadapi telepon panik anak kecelakaan, chat "nomor baru", dan suara tiruan AI.',
+    stats: {
+      title: 'Statistik Kasus Lansia (Data OJK & Siber)',
+      items: [
+        { label: 'Anak Kecelakaan', value: '65.914 Laporan', width: 100, valueClass: 'text-primary', barClass: 'bg-primary' },
+        { label: 'Anak Ditangkap Polisi', value: '65.914 Laporan', width: 100, valueClass: 'text-danger-red', barClass: 'bg-danger-red' },
+        { label: 'Chat Nomor Baru', value: '25.919 Laporan', width: 39, valueClass: 'text-secondary', barClass: 'bg-secondary-container' },
+        { label: 'Suara Tiruan AI', value: '65.914 Laporan', width: 100, valueClass: 'text-tertiary', barClass: 'bg-tertiary' },
+      ],
+      note: 'Modul 1, 2 & 4 tercatat dalam kategori induk "Mengaku Pihak Lain" (fake call) yang sama, jadi angkanya total kategori—bukan per modul. Persen korban usia 60+ per modul belum dirilis IASC/OJK (laporan s.d. 31 Agu 2026).',
+    },
     modules: [
       {
+        id: 'lansia-01',
         iconBoxClass: 'bg-warning-yellow-light text-secondary',
         icon: 'call',
         tag: 'Telepon Panik',
@@ -157,37 +194,40 @@ const TRACKS = {
         solution: 'Selalu Telpon Balik Nomor Anak',
       },
       {
+        id: 'lansia-02',
         iconBoxClass: 'bg-safe-green-light text-tertiary',
-        icon: 'redeem',
-        tag: 'Hadiah & Undian',
+        icon: 'local_police',
+        tag: 'Telepon Dini Hari',
         time: '3 Menit',
         level: 'Waspada Tinggi',
-        title: 'Hadiah Pensiun & Biaya "Pajak Hadiah"',
-        desc: 'Dapat telepon atau surat menyatakan menang undian pensiun bernilai ratusan juta, tetapi diminta membayar biaya administrasi dan pajak lebih dulu.',
-        caseStudy: <>Bu Siti (63) mentransfer Rp7.500.000 sebagai "pajak hadiah" yang sampai hari ini tak pernah datang.</>,
-        solution: 'Hadiah Sah Tak Pernah Minta Biaya',
+        title: '"Anak Bapak Ditangkap—Butuh Uang Damai!"',
+        desc: 'Pelaku mengaku polisi atau teman anak, menelepon dini hari saat Anda baru bangun, lalu meminta transfer uang "damai" atau tebusan ke rekening pribadi.',
+        caseStudy: <>Warga Bandung ditelpon pukul 2 dini hari bahwa anaknya ditahan polisi; ia selamat karena langsung memeriksa anaknya yang ternyata ada di rumah.</>,
+        solution: 'Cek Anak, Jangan Transfer',
       },
       {
+        id: 'lansia-03',
         iconBoxClass: 'bg-danger-red-light text-danger-red',
-        icon: 'badge',
-        tag: 'Mengaku Petugas',
-        time: '3 Menit',
-        level: 'Hukum & Data',
-        title: 'Penipu Mengaku Petugas Bank, BPJS & Polisi',
-        desc: 'Datang memakai seragam dan surat dinas palsu, lalu meminta kartu ATM, PIN, atau kode OTP dengan alasan "verifikasi data nasabah".',
-        caseStudy: <>Pak Bambang (70) menyerahkan PIN ATM kepada "petugas bank" yang datang ke rumah; Rp12.000.000 habis dalam hitungan menit.</>,
-        solution: 'Petugas Resmi Tak Pernah Minta PIN',
-      },
-      {
-        iconBoxClass: 'bg-primary-fixed text-primary',
         icon: 'chat',
         tag: 'WhatsApp Palsu',
         time: '3 Menit',
-        level: 'Analisis Pesan',
-        title: 'Chat "Mama, Aku Ganti Nomor Baru"',
+        level: 'Hukum & Data',
+        title: 'Chat "Ma, Ini Nomor Baru Saya"',
         desc: 'Pesan WhatsApp mengaku anak atau keluarga yang sedang ganti nomor, lalu minta transfer untuk keperluan mendesak. Foto profil pun bisa dicuri siapa saja.',
         caseStudy: <>Bu Ratna (65) mengirim Rp10.000.000 ke "nomor baru anak" yang ternyata milik penipu dari luar negeri.</>,
-        solution: 'Simpan & Cocokkan Nomor Keluarga',
+        solution: 'Telepon Nomor Lama Anak',
+      },
+      {
+        id: 'lansia-04',
+        iconBoxClass: 'bg-primary-fixed text-primary',
+        icon: 'record_voice_over',
+        tag: 'Suara Tiruan AI',
+        time: '3 Menit',
+        level: 'Analisis Pesan',
+        title: 'Suara Tiruan AI yang Persis Anak/Cucu',
+        desc: 'Teknologi AI bisa meniru suara anak, cucu, atau pejabat dengan sangat meyakinkan. Suara yang familiar dipakai untuk memancing transfer mendesak.',
+        caseStudy: <>Kasus pensiunan Taspen: ±100 calon korban, mayoritas di atas 60 tahun, diarahkan menginstal file APK hingga ratusan juta rupiah hilang.</>,
+        solution: 'Tanya Kata Sandi Keluarga',
       },
     ],
   },
@@ -199,6 +239,24 @@ export default function BelajarModus({ onHome = () => {}, onOpenModul = () => {}
   const [track, setTrack] = useState('pelajar')
   const goHome = (e) => { e.preventDefault(); onHome() }
   const active = TRACKS[track]
+
+  useEffect(() => {
+    const els = document.querySelectorAll('.reveal:not(.is-visible)')
+    if (!els.length) return
+    const obs = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            e.target.classList.add('is-visible')
+            obs.unobserve(e.target)
+          }
+        })
+      },
+      { threshold: 0.08, rootMargin: '0px 0px -40px 0px' }
+    )
+    els.forEach((el) => obs.observe(el))
+    return () => obs.disconnect()
+  }, [track])
 
   return (
     <main className="w-full bg-surface-cream min-h-screen">
@@ -215,12 +273,6 @@ export default function BelajarModus({ onHome = () => {}, onOpenModul = () => {}
                             </a>
                             <span>/</span>
                             <span className="text-primary font-semibold">Pilih Jalur Edukasi</span>
-                        </div>
-                        <div
-                            className="inline-flex items-center gap-space-xs px-space-md py-1 rounded-full bg-surface-white shadow-sm">
-                            <span className="w-2.5 h-2.5 rounded-full bg-secondary-container animate-ping"></span>
-                            <span className="font-label-sm text-label-sm text-on-surface">Target Literasi Digital Nasional
-                                2025</span>
                         </div>
                     </div>
                     <div className="flex flex-col gap-space-md max-w-3xl reveal">
@@ -447,42 +499,30 @@ export default function BelajarModus({ onHome = () => {}, onOpenModul = () => {}
                                     </li>
                                 </ul>
                             </div>
-                            <div
-                                className="p-space-lg rounded-2xl bg-surface-white shadow-sm flex flex-col gap-space-md reveal reveal-3">
-                                <span className="font-label-md text-label-md text-primary font-bold">Statistik Kasus Remaja
-                                    (Data OJK &amp; Siber)</span>
-                                <div className="flex flex-col gap-space-sm">
-                                    <div>
-                                        <div className="flex justify-between font-label-sm text-label-sm mb-1">
-                                            <span>Modul Game &amp; Akun Phishing</span>
-                                            <span className="font-bold text-danger-red">48% Korban</span>
-                                        </div>
-                                        <div className="w-full h-2 rounded-full bg-surface-container overflow-hidden">
-                                            <div className="h-full bg-danger-red rounded-full" style={{ width: "48%" }}></div>
-                                        </div>
+                            {active.stats && (
+                                <div
+                                    className="p-space-lg rounded-2xl bg-surface-white shadow-sm flex flex-col gap-space-md reveal reveal-3">
+                                    <span
+                                        className="font-label-md text-label-md text-primary font-bold">{active.stats.title}</span>
+                                    <div className="flex flex-col gap-space-sm">
+                                        {active.stats.items.map((s) => (
+                                            <div key={s.label}>
+                                                <div
+                                                    className="flex justify-between items-center gap-2 font-label-sm text-label-sm mb-1">
+                                                    <span className="whitespace-nowrap">{s.label}</span>
+                                                    <span
+                                                        className={`font-bold whitespace-nowrap ${s.valueClass}`}>{s.value}</span>
+                                                </div>
+                                                <div className="w-full h-2 rounded-full bg-surface-container overflow-hidden">
+                                                    <div className={`h-full rounded-full ${s.barClass}`}
+                                                        style={{ width: `${s.width}%` }}></div>
+                                                </div>
+                                            </div>
+                                        ))}
                                     </div>
-                                    <div>
-                                        <div className="flex justify-between font-label-sm text-label-sm mb-1">
-                                            <span>Pancingan Uang Jajan &amp; Like Medsos</span>
-                                            <span className="font-bold text-secondary">31% Korban</span>
-                                        </div>
-                                        <div className="w-full h-2 rounded-full bg-surface-container overflow-hidden">
-                                            <div className="h-full bg-secondary-container rounded-full" style={{ width: "31%" }}></div>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div className="flex justify-between font-label-sm text-label-sm mb-1">
-                                            <span>Penyalahgunaan Data &amp; Pinjol Pelajar</span>
-                                            <span className="font-bold text-primary">21% Korban</span>
-                                        </div>
-                                        <div className="w-full h-2 rounded-full bg-surface-container overflow-hidden">
-                                            <div className="h-full bg-primary rounded-full" style={{ width: "21%" }}></div>
-                                        </div>
-                                    </div>
+                                    <span className="font-body-sm text-body-sm text-text-muted">{active.stats.note}</span>
                                 </div>
-                                <span className="font-body-sm text-body-sm text-text-muted">Edukasi sejak dini terbukti
-                                    menurunkan risiko terkena manipulasi digital hingga 73%.</span>
-                            </div>
+                            )}
                         </div>
                     </div>
                     <div
