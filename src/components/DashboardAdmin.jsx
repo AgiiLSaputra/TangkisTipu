@@ -1,11 +1,6 @@
-import { useState } from 'react'
-
-const NAV_ITEMS = [
-  { id: 'dashboard', label: 'Dashboard', icon: 'grid_view' },
-  { id: 'set-soal', label: 'Set Soal', icon: 'quiz' },
-  { id: 'kode-kelas', label: 'Kode Kelas', icon: 'school' },
-  { id: 'pengaturan', label: 'Pengaturan', icon: 'settings' },
-]
+import { useEffect, useMemo, useState } from 'react'
+import AdminShell from './AdminShell.jsx'
+import DropdownPilihan from './DropdownPilihan.jsx'
 
 const STATS = [
   {
@@ -121,7 +116,8 @@ const SCENARIO_TITLES = [
   'Pemberitahuan Undian & Hadiah Palsu',
 ]
 
-const CLASS_CODE = 'RT04-WARGA'
+// Kode kelas contoh untuk tampilan kosong; daftar sesungguhnya mengikuti `sets`.
+const CLASS_CODE = 'PR-2312'
 
 function BarChart() {
   const groups = [
@@ -161,12 +157,36 @@ function BarChart() {
   )
 }
 
-export default function DashboardAdmin({ onKeluar = () => {} }) {
+export default function DashboardAdmin({ onKeluar = () => {}, onNavigate = () => {}, sets = [] }) {
   const [group, setGroup] = useState('all')
+  const [rentang, setRentang] = useState('30')
   const [refreshing, setRefreshing] = useState(false)
   const [copied, setCopied] = useState(false)
-  const [sidebarOpen, setSidebarOpen] = useState(false)
   const isEmptyDemo = group === 'empty-demo'
+
+  // Daftar kelas dibentuk dari set soal milik admin: kode kelas yang sudah
+  // tidak dipakai set apa pun otomatis hilang dari pengelompokan.
+  const opsiKelas = useMemo(() => {
+    const hitung = {}
+    sets.forEach((s) => {
+      const k = (s.kodeKelas || '').trim().toUpperCase()
+      if (k) hitung[k] = (hitung[k] || 0) + 1
+    })
+    return [
+      { value: 'all', label: 'Semua Kelompok (Aktif)' },
+      ...Object.entries(hitung).map(([kode, jml]) => ({ value: kode, label: `${kode} (${jml} set soal)` })),
+      { value: 'empty-demo', label: 'PR-0000 - Belum Ada Data (Simulasi)' },
+      { value: 'new', label: '+ Buat Kode Baru' },
+    ]
+  }, [sets])
+
+  // Jika kode kelas terpilih ikut terhapus di halaman Set Soal, kembali ke "Semua".
+  useEffect(() => {
+    if (!opsiKelas.some((o) => o.value === group)) setGroup('all')
+  }, [opsiKelas, group])
+
+  const kodeKelasAktif =
+    group !== 'all' && group !== 'empty-demo' && group !== 'new' ? group : CLASS_CODE
 
   const handleRefresh = () => {
     if (refreshing) return
@@ -179,7 +199,7 @@ export default function DashboardAdmin({ onKeluar = () => {} }) {
 
   const handleCopy = async () => {
     try {
-      await navigator.clipboard.writeText('https://tangki-stipu.id/join?kode=' + CLASS_CODE)
+      await navigator.clipboard.writeText('https://tangki-stipu.id/join?kode=' + kodeKelasAktif)
     } catch {
       /* clipboard tidak tersedia di konteks non-HTTPS */
     }
@@ -188,97 +208,8 @@ export default function DashboardAdmin({ onKeluar = () => {} }) {
   }
 
   return (
-    <div className="min-h-screen bg-surface-cream font-body-md text-on-surface antialiased">
-      {/* Sidebar */}
-      <aside
-        className={`fixed left-0 top-0 h-full w-72 bg-surface-white z-50 flex flex-col justify-between shadow-[0_1px_8px_rgba(0,0,0,0.04)] transition-transform duration-300 ${
-          sidebarOpen ? 'translate-x-0' : '-translate-x-full pointer-events-none'
-        }`}
-      >
-        <div className="flex flex-col">
-          <div className="h-16 px-space-lg flex items-center gap-space-sm bg-surface-white">
-            <img src="/assets/LogoTangkis.png" alt="Logo TangkisTipu" className="h-9 w-auto shrink-0" />
-            <div className="flex flex-col">
-              <span className="font-label-lg text-label-lg text-primary tracking-tight leading-none">TangkisTipu</span>
-              <span className="font-label-sm text-label-sm text-text-muted mt-space-xs">Portal Admin</span>
-            </div>
-            <button
-              aria-label="Tutup menu samping"
-              className="ml-auto w-9 h-9 rounded-xl flex items-center justify-center text-on-surface-variant hover:bg-surface-container-high transition-colors shrink-0"
-              onClick={() => setSidebarOpen(false)}
-              type="button"
-            >
-              <span className="material-symbols-outlined text-[22px]">chevron_left</span>
-            </button>
-          </div>
-          <div className="px-space-md py-space-sm">
-            <div className="px-space-sm py-space-xs text-label-sm font-label-sm text-text-muted uppercase tracking-wider">
-              Manajemen Edukasi
-            </div>
-          </div>
-          <nav className="flex flex-col gap-space-xs px-space-md">
-            {NAV_ITEMS.map((item) => (
-              <button
-                className={
-                  item.id === 'dashboard'
-                    ? 'flex items-center gap-space-md px-space-md py-3 transition-all bg-primary-container text-on-primary font-label-md rounded-xl shadow-sm text-left'
-                    : 'flex items-center gap-space-md px-space-md py-3 rounded-xl font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all text-left'
-                }
-                key={item.id}
-                onClick={() => {
-                  if (item.id !== 'dashboard') alert(`Halaman "${item.label}" belum tersedia pada versi demo ini.`)
-                }}
-                type="button"
-              >
-                <span className="material-symbols-outlined text-[20px]">{item.icon}</span>
-                {item.label}
-              </button>
-            ))}
-          </nav>
-        </div>
-        <div className="p-space-md bg-surface-white">
-          <div className="p-space-md rounded-xl bg-surface-cream flex items-center justify-between shadow-[0_1px_8px_rgba(0,0,0,0.04)]">
-            <div className="flex items-center gap-space-sm min-w-0">
-              <div className="w-10 h-10 rounded-full bg-primary-container text-on-primary flex items-center justify-center shrink-0">
-                <span className="material-symbols-outlined text-[20px]">admin_panel_settings</span>
-              </div>
-              <div className="flex flex-col min-w-0">
-                <span className="font-label-md text-label-md text-on-surface truncate">Rudi Hariyadi</span>
-                <span className="font-label-sm text-label-sm text-text-muted truncate">Ketua Komunitas</span>
-              </div>
-            </div>
-            <button
-              className="p-space-xs rounded-lg text-text-muted hover:text-error hover:bg-danger-red-light transition-colors"
-              onClick={onKeluar}
-              title="Keluar Akun"
-              type="button"
-            >
-              <span className="material-symbols-outlined text-[20px]">logout</span>
-            </button>
-          </div>
-        </div>
-      </aside>
-
-      {/* Tombol hamburger — menempel di pojok kiri atas konten halaman, ikut scroll bersama halaman, hilang saat sidebar terbuka */}
-      {!sidebarOpen && (
-        <button
-          aria-label="Buka menu samping"
-          className="absolute top-4 left-4 z-50 w-10 h-10 rounded-xl flex items-center justify-center text-on-surface-variant hover:bg-surface-container-high transition-colors"
-          onClick={() => setSidebarOpen(true)}
-          type="button"
-        >
-          <span className="material-symbols-outlined text-[22px]">menu</span>
-        </button>
-      )}
-
-      {/* Backdrop (mobile) */}
-      {sidebarOpen && (
-        <div className="fixed inset-0 bg-black/40 z-40 md:hidden" onClick={() => setSidebarOpen(false)} />
-      )}
-
-      {/* Konten utama */}
-      <div className={sidebarOpen ? 'md:pl-72' : ''}>
-        <main className="w-full pt-16 bg-surface-cream px-space-xl py-space-xl">
+    <AdminShell active="dashboard" onKeluar={onKeluar} onNavigate={onNavigate}>
+      <main className="w-full pt-16 bg-surface-cream px-space-xl py-space-xl">
           <div className="flex flex-col w-full">
             {/* Header halaman */}
             <div className="flex flex-col gap-space-xs pb-space-lg">
@@ -300,40 +231,24 @@ export default function DashboardAdmin({ onKeluar = () => {} }) {
                     <span className="material-symbols-outlined text-[16px]">group</span>
                     Kode Kelas
                   </label>
-                  <div className="relative">
-                    <select
-                      className="w-full appearance-none bg-none bg-surface-container-low text-on-surface font-label-md text-label-md py-2.5 pl-space-md pr-10 rounded-lg outline-none focus:bg-surface-white transition-all cursor-pointer"
-                      id="filter-group"
-                      onChange={(e) => setGroup(e.target.value)}
-                      value={group}
-                    >
-                      <option value="all">Semua Kelompok (Aktif)</option>
-                      <option value="rt05">RT 05 / RW 07 - Paguyuban Warga</option>
-                      <option value="smp12">SMP Negeri 12 - Kelas 8B</option>
-                      <option value="lansia">Komunitas Lansia Sejahtera</option>
-                      <option value="empty-demo">RT 04 / RW 07 - Belum Ada Data (Simulasi)</option>
-                      <option value="new">+ Buat Kode Baru</option>
-                    </select>
-                    <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-text-muted text-[20px]">expand_more</span>
-                  </div>
+                  <DropdownPilihan id="filter-group" nilai={group} onChange={setGroup} opsi={opsiKelas} />
                 </div>
                 <div className="flex flex-col min-w-[260px]">
                   <label className="font-label-sm text-label-sm text-text-muted mb-1 flex items-center gap-1" htmlFor="filter-date">
                     <span className="material-symbols-outlined text-[16px]">calendar_today</span>
                     Rentang Waktu
                   </label>
-                  <div className="relative">
-                    <select
-                      className="w-full appearance-none bg-none bg-surface-container-low text-on-surface font-label-md text-label-md py-2.5 pl-space-md pr-10 rounded-lg outline-none focus:bg-surface-white transition-all cursor-pointer"
-                      id="filter-date"
-                    >
-                      <option>30 Hari Terakhir (15 Jul - 14 Agu 2026)</option>
-                      <option>7 Hari Terakhir</option>
-                      <option>Semester Ini (Jan - Jun 2026)</option>
-                      <option>Kustom Tanggal...</option>
-                    </select>
-                    <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-text-muted text-[20px]">expand_more</span>
-                  </div>
+                  <DropdownPilihan
+                    id="filter-date"
+                    nilai={rentang}
+                    onChange={setRentang}
+                    opsi={[
+                      { value: '30', label: '30 Hari Terakhir (15 Jul - 14 Agu 2026)' },
+                      { value: '7', label: '7 Hari Terakhir' },
+                      { value: 'semester', label: 'Semester Ini (Jan - Jun 2026)' },
+                      { value: 'kustom', label: 'Kustom Tanggal...' },
+                    ]}
+                  />
                 </div>
               </div>
               <div className="flex items-center gap-space-sm self-end xl:self-end pt-2 xl:pt-0">
@@ -446,9 +361,6 @@ export default function DashboardAdmin({ onKeluar = () => {} }) {
                         <div className="flex flex-col">
                           <div className="flex items-center justify-between gap-space-sm mb-space-xs">
                             <div className="flex items-center gap-2">
-                              <span className={`w-6 h-6 rounded-md font-label-sm text-label-sm flex items-center justify-center shrink-0 font-bold ${v.rankClass}`}>
-                                #{v.rank}
-                              </span>
                               <span className="font-label-md text-label-md text-on-surface font-bold">{v.title}</span>
                             </div>
                             <span className={`px-2 py-0.5 rounded-full font-label-sm text-label-sm font-bold shrink-0 ${v.badgeClass}`}>{v.pct}% Salah</span>
@@ -487,7 +399,7 @@ export default function DashboardAdmin({ onKeluar = () => {} }) {
                   </div>
                   <h3 className="font-headline-md text-headline-md text-primary tracking-tight mb-space-xs">Belum Ada Peserta di Kelompok Ini</h3>
                   <p className="font-body-md text-body-md text-on-surface-variant mb-space-lg leading-relaxed">
-                    Kode kelas <span className="font-bold text-primary">{CLASS_CODE}</span> belum memiliki peserta yang menyelesaikan
+                    Kode kelas <span className="font-bold text-primary">{kodeKelasAktif}</span> belum memiliki peserta yang menyelesaikan
                     pre-test atau post-test. Bagikan kode kelompok ini kepada warga binaan untuk mulai mengumpulkan data literasi.
                   </p>
                   <div className="bg-surface-cream p-space-lg rounded-xl flex flex-col sm:flex-row items-center justify-between gap-space-md w-full mb-space-lg">
@@ -495,7 +407,7 @@ export default function DashboardAdmin({ onKeluar = () => {} }) {
                       <span className="material-symbols-outlined text-primary text-[28px]">qr_code_2</span>
                       <div className="text-left">
                         <span className="font-label-sm text-label-sm text-text-muted uppercase tracking-wider block">Kode Masuk Peserta</span>
-                        <span className="font-headline-md text-headline-md font-bold tracking-widest text-primary">{CLASS_CODE}</span>
+                        <span className="font-headline-md text-headline-md font-bold tracking-widest text-primary">{kodeKelasAktif}</span>
                       </div>
                     </div>
                     <button
@@ -533,8 +445,7 @@ export default function DashboardAdmin({ onKeluar = () => {} }) {
               </div>
             </div>
           </div>
-        </main>
-      </div>
-    </div>
+      </main>
+    </AdminShell>
   )
 }
