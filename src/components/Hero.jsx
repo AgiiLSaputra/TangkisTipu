@@ -1,4 +1,6 @@
-export default function Hero() {
+export default function Hero({ onBelajar = () => {} }) {
+  const goBelajar = (e) => { e.preventDefault(); onBelajar() }
+
   return (
     <>
     <header
@@ -88,13 +90,13 @@ export default function Hero() {
                     </h1>
                     {/*  Sub-headline (Putih 18px)  */}
                     <p className="font-body-lg text-[17px] sm:text-[18px] text-white/90 max-w-[580px] leading-relaxed">
-                        Latihan singkat lewat simulasi interaktif pesan palsu, gratis, tanpa registrasi nomor HP maupun
-                        alamat surel.
+                        Latih cara mengenali pesan penipuan lewat simulasi chat interaktif yang singkat dan mudah
+                        diikuti. Gratis, tanpa perlu mendaftar pakai nomor HP atau email.
                     </p>
                     {/*  2 Tombol Aksi  */}
                     <div className="flex flex-wrap items-center gap-space-md pt-space-xs">
                         <a className="inline-flex items-center justify-center gap-space-sm h-[52px] px-8 rounded-full bg-white text-[#17338f] font-label-lg text-label-lg font-bold shadow-lg hover:bg-sky-50 transition-all hover:-translate-y-0.5 hover:shadow-xl"
-                            href="#jalur-belajar">
+                            data-path="belajar-modus" href="#" onClick={goBelajar}>
                             <span>Mulai Latihan Sekarang</span>
                             <span className="material-symbols-outlined text-[20px]">arrow_forward</span>
                         </a>
