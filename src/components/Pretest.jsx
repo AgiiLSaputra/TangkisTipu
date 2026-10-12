@@ -16,7 +16,7 @@ export default function Pretest({ token = '', track = 1, onSelesai = () => {}, o
   const soal = soalList[idx]
   const terjawab = jawaban.filter((a) => a !== null).length
   const belum = TOTAL - terjawab
-  const persen = Math.round(((idx + 1) / TOTAL) * 100)
+  const persen = Math.round((terjawab / TOTAL) * 100)
   const lansia = trackIdx === 2
 
   const pilih = (i) => {
@@ -55,11 +55,6 @@ export default function Pretest({ token = '', track = 1, onSelesai = () => {}, o
               <div className="flex flex-col">
                 <div className="flex items-center gap-space-xs flex-wrap">
                   <h1 className="font-headline-sm text-headline-sm text-primary">Pre-test Kemampuan Awal</h1>
-                  <span
-                    className="inline-flex items-center gap-1 px-space-xs py-0.5 rounded-full bg-secondary-fixed/50 text-on-secondary-fixed-variant font-label-sm text-label-sm">
-                    <span className="material-symbols-outlined text-[14px]" aria-hidden="true">flag</span>
-                    Boleh dilewati
-                  </span>
                 </div>
                 <span className="font-body-sm text-body-sm text-text-muted">
                   Kode Sesi: {token || 'TT-PRE-9021'} • Set {trackIdx + 1}: {LABEL_SET_PRETEST[trackIdx]}
@@ -213,11 +208,6 @@ export default function Pretest({ token = '', track = 1, onSelesai = () => {}, o
                     <h2 className="font-label-lg text-label-lg text-primary font-bold">Navigasi Soal</h2>
                     <span className="font-label-sm text-label-sm text-text-muted">Total {TOTAL} Butir Kasus</span>
                   </div>
-                  <span
-                    className="inline-flex items-center gap-1 font-label-sm text-label-sm text-primary bg-surface-container-low px-space-sm py-1 rounded-full">
-                    <span className="material-symbols-outlined text-[16px]" aria-hidden="true">alarm</span>
-                    Fleksibel
-                  </span>
                 </div>
 
                 {/* Question Grid 44x44px */}
@@ -263,21 +253,21 @@ export default function Pretest({ token = '', track = 1, onSelesai = () => {}, o
                       <span className="w-3.5 h-3.5 rounded bg-primary" aria-hidden="true"></span>
                       <span className="text-on-surface-variant">Terjawab</span>
                     </div>
-                    <span className="font-label-sm text-label-sm text-primary font-bold">{terjawab} Butir</span>
+                    <span className="font-label-sm text-label-sm text-primary font-bold">{terjawab}</span>
                   </div>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <span className="w-3.5 h-3.5 rounded bg-surface-white shadow-sm" aria-hidden="true"></span>
                       <span className="text-on-surface-variant">Sedang Aktif</span>
                     </div>
-                    <span className="font-label-sm text-label-sm text-secondary font-bold">1 Butir</span>
+                    <span className="font-label-sm text-label-sm text-secondary font-bold">1</span>
                   </div>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <span className="w-3.5 h-3.5 rounded bg-surface-container-low" aria-hidden="true"></span>
                       <span className="text-on-surface-variant">Belum Dijawab</span>
                     </div>
-                    <span className="font-label-sm text-label-sm text-text-muted font-bold">{belum} Butir</span>
+                    <span className="font-label-sm text-label-sm text-text-muted font-bold">{belum}</span>
                   </div>
                 </div>
 
