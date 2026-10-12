@@ -65,12 +65,12 @@ export default function UjiSkorTes({ setPeserta = () => {}, onLanjut = () => {},
                   Kenalan dulu, yuk!
                 </h1>
                 <p className="font-body-lg text-body-lg text-on-surface-variant leading-relaxed">
-                  Privasimu adalah prioritas nomor satu kami. Belajar tangkis penipuan digital tanpa rasa
-                  waswas: <strong className="text-on-surface font-semibold">tanpa nama asli, tanpa nomor
-                    WhatsApp, tanpa email</strong>, dan seluruh hasil skor dijamin anonim.
+                  Cukup isi nama panggilan saja. <strong className="text-on-surface font-semibold">Tidak ada nama
+                    asli, nomor WhatsApp, maupun email</strong> yang kami minta, dan skor hasil latihanmu tetap
+                  tersimpan anonim.
                 </p>
               </div>
-              {/* Hero Photo with Tactile Framing & Floating Micro Badge */}
+              {/* Hero Photo with Tactile Framing */}
               <div
                 className="relative w-full rounded-2xl bg-surface-white p-space-md shadow-md overflow-hidden reveal">
                 <div
@@ -80,17 +80,6 @@ export default function UjiSkorTes({ setPeserta = () => {}, onLanjut = () => {},
                     src="/assets/FotoPagePerkenalan.png" />
                   <div
                     className="absolute inset-0 bg-gradient-to-t from-primary/70 via-primary/10 to-transparent">
-                  </div>
-                  <div
-                    className="absolute bottom-space-md left-space-md right-space-md p-space-sm rounded-lg bg-surface-white/95 backdrop-blur-md flex flex-wrap items-center justify-between gap-space-sm shadow-sm">
-                    <div className="flex items-center gap-space-xs">
-                      <span className="material-symbols-outlined text-primary text-[22px]">fingerprint</span>
-                      <span className="font-label-sm text-label-sm text-on-surface">Data sesi dihapus
-                        otomatis saat keluar</span>
-                    </div>
-                    <span
-                      className="font-label-sm text-label-sm text-tertiary font-bold bg-safe-green-light px-space-xs py-0.5 rounded">Enkripsi
-                      Klien</span>
                   </div>
                 </div>
               </div>
