@@ -250,7 +250,7 @@ export default function ModulDetail({ content: c, onBack = () => {}, onSimulasi 
                     Kembali ke Kurikulum
                   </a>
                   <a className="w-full sm:w-auto h-[52px] px-space-lg rounded-xl bg-primary text-on-primary font-label-lg text-label-lg flex items-center justify-center gap-2 hover:bg-primary-container transition-all shadow-sm cursor-pointer"
-                    href="#" onClick={(e) => { e.preventDefault(); onSimulasi() }}>
+                    href="#" onClick={(e) => { e.preventDefault(); onSimulasi(c.id) }}>
                     <span>Lanjut ke Simulasi Chat Penipuan</span>
                     <span className="material-symbols-outlined text-[20px]">arrow_forward</span>
                   </a>
