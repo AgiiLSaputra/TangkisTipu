@@ -91,6 +91,38 @@
             animation: pop-in 0.3s cubic-bezier(0.22, 0.61, 0.36, 1) both;
         }
 
+        /* ===== Animasi tambahan untuk SimulasiChatModul & SimulasiKasusInteraktif ===== */
+
+        /* Titik "sedang mengetik" memantul bergantian */
+        @keyframes typingBounce {
+            0%, 80%, 100% { transform: translateY(0); opacity: 0.4; }
+            40%           { transform: translateY(-4px); opacity: 1; }
+        }
+
+        .typing-dot {
+            animation: typingBounce 1.2s infinite ease-in-out;
+        }
+
+        /* Bubble chat muncul halus dari bawah (dipakai bareng .pop-in) */
+        @keyframes slide-up-soft {
+            from { opacity: 0; transform: translateY(10px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .slide-up-soft {
+            animation: slide-up-soft 0.32s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+        }
+
+        /* Kursor berkedip pada indikator "menunggu balasan" */
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 0.3; transform: scale(0.85); }
+            50%      { opacity: 1;   transform: scale(1); }
+        }
+
+        .pulse-dot {
+            animation: pulse-dot 1.6s ease-in-out infinite;
+        }
+
         @keyframes tt-progress {
             from { width: 0%; }
             to { width: 100%; }
@@ -127,6 +159,7 @@
             .page-enter { animation: none !important; }
             .hint-in, .fade-in, .pop-in { animation: none !important; }
             .progress-fill, .shake, .qr-scan { animation: none !important; }
+            .typing-dot, .slide-up-soft, .pulse-dot { animation: none !important; }
             .animate-ping, .animate-pulse { animation: none !important; }
             .reveal {
                 opacity: 1 !important;
